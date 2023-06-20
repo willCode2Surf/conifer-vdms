@@ -1,0 +1,17 @@
+{
+  "name": "conifer-tools",
+  "version": "0.0.1",
+  "description": "Conifer Monorepo",
+  "author": "Timothy Carambat",
+  "license": "None",
+  "private": true,
+  "scripts": {
+    "start": "cd frontend && yarn start",
+    "start:firebase": "firebase emulators:start",
+    "lint": "cd frontend && yarn lint && cd ../functions && yarn lint",
+    "deploy:hosting": "cd frontend && yarn build && cd .. && firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:functions:frontend": "firebase deploy --only functions:frontend"
+  },
+  "devDependencies": {}
+}
