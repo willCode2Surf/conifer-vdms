@@ -15,6 +15,9 @@ const Workspace = {
   db: async function () {
     return await getFirestore();
   },
+  makeKey: () => {
+    return `workspace-${uuidAPIKey.create().apiKey}`;
+  },
   createNew: async function (ownerUid, inputs = {}) {
     var slug = slugify(inputs.name, { lower: true });
     const existingBySlug = await this.findBySlug(slug);
@@ -29,8 +32,8 @@ const Workspace = {
       admins: [ownerUid],
       slug,
       ...inputs,
+      workspaceId: this.makeKey(),
     };
-
     const newOrg = await (
       await this.db()
     )
@@ -135,6 +138,20 @@ const Workspace = {
       .collection(this.collection)
       .where('slug', '==', slug)
       .where('orgUid', '==', orgUid)
+      .get()
+      .then((result) => {
+        if (result.docs.length === 0) return null;
+        const doc = result.docs[0];
+        return { uid: doc.id, ...doc.data() };
+      });
+    return org;
+  },
+  findByWorkspaceId: async function (workspaceId) {
+    const org = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('workspaceId', '==', workspaceId)
       .get()
       .then((result) => {
         if (result.docs.length === 0) return null;

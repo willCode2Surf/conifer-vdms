@@ -1,7 +1,10 @@
 const JWT = require('jsonwebtoken');
 const { User } = require('../../models/user');
+const { ApiKey } = require('../../models/apiKey');
+const { Organization } = require('../../models/organization');
 const { ADMIN_TOKEN } = require('../constants');
-const SECRET = 'qkThPRGjeipA61JkVIjDatGQ2hB1YaTV';
+const { Workspace } = require('../../models/workspace');
+const SECRET = process.env.JWT_SECRET;
 
 function reqBody(request) {
   return typeof request.body === 'string'
@@ -62,13 +65,52 @@ function validAdmin(request, response, next) {
   next();
 }
 
-// Used for when Mintplex backend needs to mark a claim as redeemed
-const MF_CLAIM_HEADER = 'x-mintfoundry-claims';
-const MF_CLAIM_AUTH =
-  'Kykle4l3abqQ2IzAXJ839yvbkmzxcDmg5n07UaIrtZTySdLabXLcs/VHl9IPnVZ1';
-function validClaimRequest(request) {
-  const auth = request.header(MF_CLAIM_HEADER);
-  return !!auth && auth === MF_CLAIM_AUTH;
+function getCredentials(request) {
+  return {
+    organizationId: request.header('X-Org-Id') ?? null,
+    workspaceId: request.header('X-Workspace-Id') ?? null,
+    apiKey: request.header('X-Api-Key') ?? null,
+  };
+}
+
+async function validApiToken(request, response, next) {
+  const { apiKey } = getCredentials(request);
+  if (!apiKey || apiKey.length === 0) {
+    response.status(403).json({ error: '[000] No api key present.' });
+    return;
+  }
+
+  const existingKey = await ApiKey.findByApiKey(apiKey);
+  if (!existingKey) {
+    response.status(403).json({ error: '[001] Invalid API key.' });
+    return;
+  }
+
+  const organization = await Organization.findByUid(
+    existingKey.organizationUid,
+  );
+  if (!organization || !organization.admins.includes(existingKey.createdBy)) {
+    response.status(403).json({ error: '[002] Invalid API key.' });
+    return;
+  }
+
+  next();
+}
+
+async function organizationFromToken(request) {
+  const { organizationId } = getCredentials(request);
+  if (!organizationId) return null;
+
+  const organization = await Organization.findByOrgId(organizationId);
+  return organization;
+}
+
+async function workspaceFromToken(request) {
+  const { workspaceId } = getCredentials(request);
+  if (!workspaceId) return null;
+
+  const workspace = await Workspace.findByWorkspaceId(workspaceId);
+  return workspace;
 }
 
 async function userFromSession(request) {
@@ -112,7 +154,10 @@ module.exports = {
   makeJWT,
   validAdmin,
   validSessionForUser,
-  validClaimRequest,
   userFromSession,
   userIdFromSession,
+  validApiToken,
+  getCredentials,
+  organizationFromToken,
+  workspaceFromToken,
 };

@@ -5,6 +5,7 @@ import Sidebar from '../components/Sidebar';
 interface DefaultLayoutProps {
   headerEntity: any;
   headerProp: string;
+  headerNameProp?: string;
   workspaces: any[];
   organizations: any[];
   organization: any;
@@ -15,6 +16,7 @@ const AppLayout = ({
   workspaces,
   headerEntity,
   headerProp,
+  headerNameProp,
   organizations,
   children,
 }: DefaultLayoutProps) => {
@@ -33,6 +35,7 @@ const AppLayout = ({
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           {!!headerEntity && (
             <Header
+              nameProp={headerNameProp}
               entity={headerEntity}
               property={headerProp}
               sidebarOpen={sidebarOpen}

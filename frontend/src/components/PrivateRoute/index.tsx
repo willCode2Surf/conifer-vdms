@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { FullScreenLoader } from '../Preloader';
 import validateSessionTokenForUser from '../../utils/session';
+import paths from '../../utils/paths';
 
 function useIsAuthenticated() {
   const [isAuthd, setIsAuthed] = useState<Boolean | null>(null);
@@ -39,7 +40,7 @@ const PrivateRoute = ({
   const authed = useIsAuthenticated();
   if (authed === null) return <FullScreenLoader />;
 
-  return authed ? <Component /> : <Navigate to="/login" />;
+  return authed ? <Component /> : <Navigate to={paths.signIn()} />;
 };
 
 export default PrivateRoute;

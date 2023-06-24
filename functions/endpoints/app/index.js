@@ -13,6 +13,8 @@ const { Organization } = require('../../models/organization');
 const { Document } = require('../../models/document');
 const { Workspace } = require('../../models/workspace');
 const { ApiKey } = require('../../models/apiKey');
+const { DocumentFragment } = require('../../models/documentFragment');
+const { readJSON } = require('../../utils/storage');
 app.use(cors({ origin: true }));
 
 app.get('/heartbeat', function (_, response) {
@@ -227,6 +229,27 @@ app.get('/v1/org/:slug/documents', async function (request, response) {
   response.status(200).json({ documents });
 });
 
+app.get('/v1/org/:slug/workspaces', async function (request, response) {
+  const { slug } = request.params;
+  const user = await userFromSession(request);
+  if (!user) {
+    response.status(200).json({ documents: [] });
+    return;
+  }
+
+  const organization = await Organization.findBySlugWithOwner(
+    user.uid,
+    slug.toLowerCase(),
+  );
+  if (!organization) {
+    response.status(200).json({ documents: [] });
+    return;
+  }
+
+  const workspaces = await Workspace.byOrgUid(organization.uid);
+  response.status(200).json({ workspaces });
+});
+
 app.get(
   '/v1/org/:slug/workspace/:workspaceSlug/documents',
   async function (request, response) {
@@ -250,7 +273,7 @@ app.get(
       return;
     }
 
-    const documents = await Document.byWorkspace(workspace.slug);
+    const documents = await Document.byWorkspace(workspace.workspaceId);
     response.status(200).json({ documents });
   },
 );
@@ -387,5 +410,46 @@ app.post('/v1/org/:slug/new-workspace', async function (request, response) {
 
   response.status(200).json({ workspace });
 });
+
+app.get('/v1/document/:docUid/fragments', async function (request, response) {
+  const { docUid } = request.params;
+  const user = await userFromSession(request);
+  if (!user) {
+    response.status(403).end();
+    return;
+  }
+
+  const document = await Document.byId(docUid);
+  if (!document) {
+    response.status(404).end();
+    return;
+  }
+
+  const fragments = await DocumentFragment.byDoc(docUid);
+  response.status(200).json({ fragments });
+});
+
+app.get(
+  '/v1/document/:docUid/fragment/:order',
+  async function (request, response) {
+    const { docUid, order } = request.params;
+    const user = await userFromSession(request);
+    if (!user) {
+      response.status(403).end();
+      return;
+    }
+
+    const fragment = await DocumentFragment.byDocAndOrder(
+      docUid,
+      Number(order),
+    );
+    if (!fragment) {
+      response.status(404).end();
+      return;
+    }
+    const data = await readJSON(fragment.filepath);
+    response.status(200).json({ ...data });
+  },
+);
 
 module.exports.frontendApi = app;

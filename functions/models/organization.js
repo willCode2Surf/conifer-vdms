@@ -9,11 +9,14 @@ const Organization = {
     admins: [],
     slug: null,
     name: null,
-    orgId: `org-${uuidAPIKey.create().apiKey}`,
+    orgId: null,
     createdAt: FieldValue.serverTimestamp(),
   },
   db: async function () {
     return await getFirestore();
+  },
+  makeKey: () => {
+    return `org-${uuidAPIKey.create().apiKey}`;
   },
   createNew: async function (ownerUid, inputs = {}) {
     var slug = slugify(inputs.name, { lower: true });
@@ -29,6 +32,7 @@ const Organization = {
       admins: [ownerUid],
       slug,
       ...inputs,
+      orgId: this.makeKey(),
     };
 
     const newOrg = await (
@@ -85,6 +89,20 @@ const Organization = {
     )
       .collection(this.collection)
       .where('slug', '==', slug)
+      .get()
+      .then((result) => {
+        if (result.docs.length === 0) return null;
+        const doc = result.docs[0];
+        return { uid: doc.id, ...doc.data() };
+      });
+    return org;
+  },
+  findByOrgId: async function (orgId) {
+    const org = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('orgId', '==', orgId)
       .get()
       .then((result) => {
         if (result.docs.length === 0) return null;

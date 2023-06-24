@@ -1,8 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Jazzicon from '../../../components/Jazzicon';
 import paths from '../../../utils/paths';
 import moment from 'moment';
-import pluralize from 'pluralize';
 import { useState } from 'react';
 import Workspace from '../../../models/workspace';
 import PreLoader from '../../../components/Preloader';
@@ -56,14 +55,14 @@ export default function WorkspacesList({
                       </h5>
                       <p>
                         <span className="text-xs text-slate-500">
-                          {truncate(workspace.workspaceId, 20)}
+                          {truncate(workspace.workspaceId, 15)}
                         </span>
                       </p>
                     </div>
                     <div className="flex flex-col items-end gap-y-1">
                       <div className="flex items-center justify-center gap-x-1">
                         <p className="text-sm text-gray-600">
-                          {nFormatter(workspace?.documents)}
+                          {nFormatter(workspace?.documents || 0)}
                         </p>
                         <File className="h-4 w-4 text-gray-600" />
                       </div>

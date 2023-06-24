@@ -225,6 +225,48 @@ const Document = {
 
     return totalBytes;
   },
+  deleteByWorkspace: async function (workspaceId) {
+    const db = await this.db();
+    const documents = await this.byWorkspace(workspaceId);
+    if (documents.length === 0) return;
+
+    const batch = db.batch();
+    documents.forEach((doc) => {
+      const ref = db.collection(this.collection).doc(doc.uid);
+      ref.delete();
+    });
+
+    await batch.commit();
+    return;
+  },
+  deleteByUid: async function (documentUid) {
+    await (await this.db())
+      .collection(this.collection)
+      .doc(documentUid)
+      .delete();
+    return;
+  },
+  vectorIds: async function (documentUid) {
+    const document = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .doc(documentUid)
+      .get()
+      .then((res) => {
+        if (!res.exists) return null;
+        return { uid: res.id, ...res.data() };
+      });
+    if (!document) return [];
+
+    try {
+      const cache = await readJSON(document.cacheFilepath);
+      return cache.ids;
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  },
 };
 
 module.exports.Document = Document;

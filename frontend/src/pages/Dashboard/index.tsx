@@ -29,17 +29,21 @@ export default function Dashboard() {
         return false;
       }
 
-      const _workspaces = await User.workspaces();
-      const _documents = slug ? await Organization.documents(slug) : [];
+      const focusedOrg =
+        orgs?.find((org: any) => org.slug === slug) || orgs?.[0];
+      const _workspaces = await Organization.workspaces(focusedOrg.slug);
+      const _documents = slug
+        ? await Organization.documents(focusedOrg.slug)
+        : [];
 
       setOrganizations(orgs);
-      setOrganization(orgs?.find((org: any) => org.slug === slug) || orgs?.[0]);
+      setOrganization(focusedOrg);
       setWorkspaces(_workspaces);
       setDocuments(_documents);
       setLoading(false);
     }
     userOrgs();
-  }, [user.uid]);
+  }, [user.uid, window.location.pathname]);
 
   if (loading || organizations.length === 0 || !organization) {
     return (

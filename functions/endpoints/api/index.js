@@ -5,12 +5,14 @@ const { v4: uuidv4 } = require('uuid');
 const { Document } = require('../../models/document');
 const {
   reqBody,
-  makeJWT,
-  validSessionForUser,
-  userFromSession,
+  validApiToken,
+  getCredentials,
+  organizationFromToken,
+  workspaceFromToken,
 } = require('../../utils/http');
 const { DocumentFragment } = require('../../models/documentFragment');
 const { exportFile } = require('../../utils/storage');
+const { Workspace } = require('../../models/workspace');
 app.use(cors({ origin: true }));
 
 app.get('/ping', function (_, response) {
@@ -19,13 +21,12 @@ app.get('/ping', function (_, response) {
 
 // Validate API Token for Organization
 // X-Org-Id
-// X-Workspace-Id
+// X-Workspace-Id (optional)
 // X-Api-Key
-// app.use('/v1/*', validSessionForUser);
+app.use('/v1/*', validApiToken);
 
 app.post('/v1/create-root-document', async function (request, response) {
-  const organizationId = request.header('X-Org-Id') ?? null;
-  const workspaceId = request.header('X-Workspace-Id') ?? null;
+  const { organizationId, workspaceId } = getCredentials(request);
   const body = reqBody(request);
 
   if (!body.documentName) {
@@ -45,8 +46,7 @@ app.post('/v1/create-root-document', async function (request, response) {
 app.post(
   '/v1/append-workspace-document-packet',
   async function (request, response) {
-    const organizationId = request.header('X-Org-Id') ?? null;
-    const workspaceId = request.header('X-Workspace-Id') ?? null;
+    const { organizationId, workspaceId } = getCredentials(request);
     const { docId, order, packet } = reqBody(request);
 
     const document = await Document.byId(docId);
@@ -94,5 +94,65 @@ app.get(
     response.status(200).json({ msg: 'noop' });
   },
 );
+
+// Get all documents in Organization.
+app.get('/v1/documents/all', async function (request, response) {
+  const organization = await organizationFromToken(request);
+  const documents = (
+    await Document.byOrg(organization.uid, organization.orgId)
+  ).map((document) => {
+    delete document.readyForCache;
+    delete document.cacheFilepath;
+    delete document.organizationUid;
+
+    delete document.workspace.uid;
+    delete document.workspace.admins;
+    delete document.workspace.orgUid;
+
+    return document;
+  });
+
+  response.status(200).json({ documents });
+});
+
+// Get all documents in Org/Workspace
+app.get('/v1/documents/workspace', async function (request, response) {
+  const workspace = await workspaceFromToken(request);
+  const documents = (await Document.byWorkspace(workspace.workspaceId)).map(
+    (document) => {
+      delete document.readyForCache;
+      delete document.cacheFilepath;
+      delete document.organizationUid;
+
+      delete document?.workspace?.uid;
+      delete document?.workspace?.admins;
+      delete document?.workspace?.orgUid;
+
+      return document;
+    },
+  );
+  response.status(200).json({ documents });
+});
+
+app.get(
+  '/v1/documents/:documentUid/vector-ids',
+  async function (request, response) {
+    const { documentUid } = request.params;
+    const vectorIds = await Document.vectorIds(documentUid);
+    response.status(200).json({ ids: vectorIds });
+  },
+);
+
+app.delete('/v1/documents/workspace', async function (request, response) {
+  const workspace = await workspaceFromToken(request);
+  await Document.deleteByWorkspace(workspace.workspaceId);
+  response.status(200).json({ msg: 'ok' });
+});
+
+app.delete('/v1/documents/:documentUid', async function (request, response) {
+  const { documentUid } = request.params;
+  await Document.deleteByUid(documentUid);
+  response.status(200).json({ msg: 'ok' });
+});
 
 module.exports.apiEndpoints = app;

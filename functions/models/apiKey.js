@@ -5,27 +5,32 @@ const ApiKey = {
   collection: 'api_keys',
   baseRecord: {
     organizationUid: null,
-    key: `ck-${uuidAPIKey.create().apiKey}`,
+    key: null,
     createdBy: null,
     createdAt: FieldValue.serverTimestamp(),
   },
   db: async function () {
     return await getFirestore();
   },
+  makeKey: () => {
+    return `ck-${uuidAPIKey.create().apiKey}`;
+  },
   createNew: async function (inputs = {}) {
+    const recordData = {
+      ...this.baseRecord,
+      ...inputs,
+      key: this.makeKey(),
+    };
+
     const newOrg = await (
       await this.db()
     )
       .collection(this.collection)
-      .add({
-        ...this.baseRecord,
-        ...inputs,
-      })
+      .add(recordData)
       .then((docRef) => {
         return {
           uid: docRef.id,
-          ...this.baseRecord,
-          ...inputs,
+          ...recordData,
         };
       });
 

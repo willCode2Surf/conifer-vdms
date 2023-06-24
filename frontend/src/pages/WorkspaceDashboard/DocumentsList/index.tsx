@@ -51,7 +51,7 @@ export default function DocumentsList({
                   key={document.uid}
                   to={paths.document(
                     organization.slug,
-                    document.workspace.slug,
+                    workspace.slug,
                     document.uid
                   )}
                   className="flex w-full items-center gap-5 px-7.5 py-3 text-gray-600 hover:bg-gray-3 dark:hover:bg-meta-4"
@@ -67,7 +67,7 @@ export default function DocumentsList({
                     </div>
                     <div className="w-6/12 2xsm:w-5/12 md:w-3/12">
                       <span className="font-medium">
-                        {document.workspace.name || ''}
+                        {workspace.name || ''}
                       </span>
                     </div>
                     <div className="hidden w-3/12 overflow-x-scroll md:block xl:w-3/12">

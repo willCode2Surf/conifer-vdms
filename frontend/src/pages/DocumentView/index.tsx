@@ -6,21 +6,17 @@ import User from '../../models/user';
 import paths from '../../utils/paths';
 import AppLayout from '../../layout/AppLayout';
 import { useParams } from 'react-router-dom';
-import Statistics from './Statistics';
-import DocumentsList from './DocumentsList';
-import ApiKeyCard from './ApiKey';
 import Workspace from '../../models/workspace';
-import Organization from '../../models/organization';
+import FragmentList from './FragmentList';
 
-export default function WorkspaceDashboard() {
+export default function DocumentView() {
   const { user } = useUser();
-  const { slug, workspaceSlug } = useParams();
+  const { slug, workspaceSlug, docUid } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<object[]>([]);
   const [organization, setOrganization] = useState<object | null>(null);
   const [workspaces, setWorkspaces] = useState<object[]>([]);
-  const [workspace, setWorkspace] = useState<object[]>([]);
-  const [documents, setDocuments] = useState<object[]>([]);
+  const [document, setDocument] = useState<object[]>([]);
 
   useEffect(() => {
     async function userOrgs() {
@@ -32,24 +28,19 @@ export default function WorkspaceDashboard() {
         return false;
       }
 
-      const focusedOrg =
-        orgs?.find((org: any) => org.slug === slug) || orgs?.[0];
-      const _workspaces = await Organization.workspaces(focusedOrg.slug);
+      const _workspaces = await User.workspaces();
       const _documents = slug
         ? await Workspace.documents(slug, workspaceSlug)
         : [];
 
       setOrganizations(orgs);
-      setOrganization(focusedOrg);
+      setOrganization(orgs?.find((org: any) => org.slug === slug) || null);
       setWorkspaces(_workspaces);
-      setWorkspace(
-        _workspaces?.find((ws: any) => ws.slug === workspaceSlug) || null
-      );
-      setDocuments(_documents);
+      setDocument(_documents?.find((doc: any) => doc.uid === docUid) || null);
       setLoading(false);
     }
     userOrgs();
-  }, [user.uid, window.location.pathname]);
+  }, [user.uid]);
 
   if (loading || organizations.length === 0) {
     return (
@@ -61,26 +52,16 @@ export default function WorkspaceDashboard() {
 
   return (
     <AppLayout
-      headerEntity={workspace}
-      headerProp="workspaceId"
+      headerEntity={document}
+      headerProp="uid"
+      headerNameProp="documentName"
       organizations={organizations}
       organization={organization}
       workspaces={workspaces}
     >
-      {organization && (
-        <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-          <ApiKeyCard organization={organization} />
-        </div>
-      )}
-
-      <Statistics workspace={workspace} />
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <div className="col-span-12 xl:col-span-12">
-          <DocumentsList
-            organization={organization}
-            workspace={workspace}
-            documents={documents}
-          />
+          <FragmentList />
         </div>
       </div>
     </AppLayout>

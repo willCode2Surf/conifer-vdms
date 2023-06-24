@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react';
 const Header = (props: {
   entity: any | null;
   property: string;
+  nameProp?: string;
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
   const [copied, setCopied] = useState(false);
   if (!props.entity) return null;
-  const { entity, property } = props;
+  const { entity, property, nameProp } = props;
 
   const handleCopy = () => {
     window.navigator.clipboard.writeText(entity[property]);
@@ -83,7 +84,7 @@ const Header = (props: {
         <div className="hidden sm:block">
           <div className="flex items-center gap-x-4">
             <p className="text-4xl font-semibold text-slate-800">
-              {entity.name}
+              {entity[nameProp ?? 'name']}
             </p>
             <button
               onClick={handleCopy}

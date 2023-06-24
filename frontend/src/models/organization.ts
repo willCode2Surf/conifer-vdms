@@ -58,6 +58,19 @@ const Organization = {
         return [];
       });
   },
+  workspaces: async (slug: string) => {
+    return fetch(`${API_BASE}/v1/org/${slug}/workspaces`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: baseHeaders(),
+    })
+      .then((res) => res.json())
+      .then((res) => res?.workspaces || [])
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+  },
   apiKey: async (slug: string) => {
     return fetch(`${API_BASE}/v1/org/${slug}/api-key`, {
       method: 'GET',

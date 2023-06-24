@@ -48,6 +48,21 @@ const DocumentFragment = {
       });
     return fragments;
   },
+  byDocAndOrder: async function (docId = '', order = 0) {
+    const fragment = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('documentId', '==', docId)
+      .where('order', '==', Number(order))
+      .get()
+      .then((result) => {
+        if (result.docs.length === 0) return null;
+        const doc = result.docs[0];
+        return { uid: doc.id, ...doc.data() };
+      });
+    return fragment;
+  },
 };
 
 module.exports.DocumentFragment = DocumentFragment;

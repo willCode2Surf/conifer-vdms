@@ -10,6 +10,7 @@ import SignUp from './pages/Authentication/SignUp';
 import OnboardingHome from './pages/Onboarding';
 import OrganizationDashboard from './pages/Dashboard';
 import WorkspaceDashboard from './pages/WorkspaceDashboard';
+import DocumentView from './pages/DocumentView';
 
 function App() {
   return (
@@ -30,6 +31,11 @@ function App() {
         <Route
           path="/dashboard/:slug/workspace/:workspaceSlug"
           element={<PrivateRoute Component={WorkspaceDashboard} />}
+        />
+
+        <Route
+          path="/dashboard/:slug/workspace/:workspaceSlug/document/:docUid"
+          element={<PrivateRoute Component={DocumentView} />}
         />
 
         <Route
