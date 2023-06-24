@@ -21,7 +21,7 @@ export default function Header() {
           <div className="flex items-center lg:order-2">
             {user ? (
               <a
-                href={paths.home()}
+                href={paths.dashboard()}
                 className="mr-2 rounded-lg border border-blue-600 px-5 py-2.5 text-lg text-sm font-medium text-blue-600 hover:border-transparent hover:bg-blue-50 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
               >
                 Go to Dashboard

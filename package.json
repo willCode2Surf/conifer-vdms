@@ -11,7 +11,8 @@
     "lint": "cd frontend && yarn lint && cd ../functions && yarn lint",
     "deploy:hosting": "cd frontend && yarn build && cd .. && firebase deploy --only hosting",
     "deploy:functions": "firebase deploy --only functions",
-    "deploy:functions:frontend": "firebase deploy --only functions:frontend"
+    "deploy:functions:frontend": "firebase deploy --only functions:frontend",
+    "deploy:functions:api": "firebase deploy --only functions:api"
   },
   "devDependencies": {}
 }

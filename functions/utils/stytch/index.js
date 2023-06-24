@@ -1,5 +1,7 @@
+require('dotenv').config()
 const stytch = require('stytch');
 const { User } = require('../../models/user');
+
 const ENV = process.env.FUNCTIONS_EMULATOR === 'true' ? 'test' : 'live';
 const PROJECT = process.env.STYTCH_PROJECT_ID
 const SECRET = process.env.STYTCH_SECRET

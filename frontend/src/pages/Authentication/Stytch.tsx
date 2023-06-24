@@ -34,7 +34,7 @@ export default function AuthenticateStytch() {
       setIsValid(true);
 
       setTimeout(() => {
-        window.location.assign(paths.home());
+        window.location.assign(paths.dashboard());
       }, 1_500);
     };
 

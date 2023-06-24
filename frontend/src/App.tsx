@@ -7,7 +7,8 @@ import AuthenticateStytch from './pages/Authentication/Stytch';
 import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 
-import OrganizationHome from './pages/Landing';
+import OnboardingHome from './pages/Onboarding';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -16,8 +17,22 @@ function App() {
         <Route path="/" element={<Landing />} />
 
         <Route
-          path="/organizations"
-          element={<PrivateRoute Component={OrganizationHome} />}
+          path="/dashboard"
+          element={<PrivateRoute Component={Dashboard} />}
+        />
+        <Route
+          path="/dashboard/:orgSlug"
+          element={<PrivateRoute Component={Dashboard} />}
+        />
+
+        {/* <Route
+          path="/dashboard/:orgSlug/workspace/:slug"
+          element={<PrivateRoute Component={Dashboard} />}
+        /> */}
+
+        <Route
+          path="/onboarding"
+          element={<PrivateRoute Component={OnboardingHome} />}
         />
 
         <Route path="/authenticate/stytch" element={<AuthenticateStytch />} />

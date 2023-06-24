@@ -1,4 +1,3 @@
-const admin = require('firebase-admin');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 
 const User = {

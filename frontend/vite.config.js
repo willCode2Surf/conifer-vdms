@@ -8,7 +8,8 @@ export default defineConfig({
     host: 'localhost'
   },
   define: {
-    'process.env': process.env
+    'process.env': process.env,
+    global: {},
   },
   plugins: [react()],
 })

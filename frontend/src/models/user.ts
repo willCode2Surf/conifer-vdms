@@ -41,6 +41,36 @@ const User = {
     if (!response) return { token: null, user: null, error };
     return response;
   },
+  organizations: async () => {
+    const organizations = await fetch(`${API_BASE}/v1/orgs`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: baseHeaders(),
+    })
+      .then((res) => res.json())
+      .then((res) => res?.organizations || [])
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+
+    return organizations;
+  },
+  workspaces: async () => {
+    const workspaces = await fetch(`${API_BASE}/v1/orgs/workspaces`, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: baseHeaders(),
+    })
+      .then((res) => res.json())
+      .then((res) => res?.workspaces || [])
+      .catch((e) => {
+        console.error(e);
+        return [];
+      });
+
+    return workspaces;
+  },
 };
 
 export default User;
