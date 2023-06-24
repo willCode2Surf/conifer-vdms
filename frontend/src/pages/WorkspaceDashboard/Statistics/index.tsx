@@ -2,10 +2,12 @@ import { memo, useState, useEffect } from 'react';
 import PreLoader from '../../../components/Preloader';
 import { humanFileSize, nFormatter } from '../../../utils/numbers';
 import moment from 'moment';
-import Organization from '../../../models/organization';
 import pluralize from 'pluralize';
+import Workspace from '../../../models/workspace';
+import { useParams } from 'react-router-dom';
 
-const Statistics = ({ organization }: { organization: any }) => {
+const Statistics = ({ workspace }: { workspace: any }) => {
+  const { slug } = useParams();
   const [documents, setDocuments] = useState({
     status: 'loading',
     value: 0,
@@ -21,20 +23,20 @@ const Statistics = ({ organization }: { organization: any }) => {
 
   useEffect(() => {
     async function collectStats() {
-      if (!organization?.slug) return false;
+      if (!workspace.uid || !slug) return false;
 
-      Organization.stats(organization.slug, 'documents').then((json) => {
+      Workspace.stats(slug, workspace.slug, 'documents').then((json) => {
         setDocuments({ status: 'complete', value: json.value });
       });
-      Organization.stats(organization.slug, 'vectors').then((json) => {
+      Workspace.stats(slug, workspace.slug, 'vectors').then((json) => {
         setVectors({ status: 'complete', value: json.value });
       });
-      Organization.stats(organization.slug, 'cache-size').then((json) => {
+      Workspace.stats(slug, workspace.slug, 'cache-size').then((json) => {
         setCache({ status: 'complete', value: json.value });
       });
     }
     collectStats();
-  }, [organization?.slug]);
+  }, [workspace.uid]);
 
   return (
     <div className="col-span-12 rounded-md border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -85,9 +87,9 @@ const Statistics = ({ organization }: { organization: any }) => {
         <div className="flex items-center justify-center gap-2">
           <div className="flex flex-col items-center">
             <h4 className="mb-0.5 text-xl font-bold text-black dark:text-white md:text-title-lg">
-              {organization?.lastUpdated
-                ? moment.unix(organization.lastUpdated._seconds).fromNow()
-                : moment.unix(organization.createdAt._seconds).fromNow()}
+              {workspace.lastUpdated
+                ? moment.unix(workspace.lastUpdated._seconds).fromNow()
+                : moment.unix(workspace.createdAt._seconds).fromNow()}
             </h4>
             <p className="text-sm font-medium">Last Modified</p>
           </div>

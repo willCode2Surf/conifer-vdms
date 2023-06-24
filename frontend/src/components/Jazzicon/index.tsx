@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import JAZZ from "@metamask/jazzicon";
+import { useRef, useEffect } from 'react';
+import JAZZ from '@metamask/jazzicon';
 
 export default function Jazzicon({ size = 10, uid = '' }) {
   const divRef = useRef(null);
@@ -13,13 +13,13 @@ export default function Jazzicon({ size = 10, uid = '' }) {
       if (!divRef || !divRef.current) return null;
       divRef?.current?.appendChild(result);
     }
-    add()
+    add();
   }, []);
 
   return <div className="flex" ref={divRef} />;
 }
 
-function toPseudoRandomInteger(uidString = "") {
+function toPseudoRandomInteger(uidString = '') {
   var numberArray = [uidString.length];
   for (var i = 0; i < uidString.length; i++) {
     numberArray[i] = uidString.charCodeAt(i);

@@ -8,7 +8,8 @@ import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 
 import OnboardingHome from './pages/Onboarding';
-import Dashboard from './pages/Dashboard';
+import OrganizationDashboard from './pages/Dashboard';
+import WorkspaceDashboard from './pages/WorkspaceDashboard';
 
 function App() {
   return (
@@ -18,17 +19,18 @@ function App() {
 
         <Route
           path="/dashboard"
-          element={<PrivateRoute Component={Dashboard} />}
-        />
-        <Route
-          path="/dashboard/:orgSlug"
-          element={<PrivateRoute Component={Dashboard} />}
+          element={<PrivateRoute Component={OrganizationDashboard} />}
         />
 
-        {/* <Route
-          path="/dashboard/:orgSlug/workspace/:slug"
-          element={<PrivateRoute Component={Dashboard} />}
-        /> */}
+        <Route
+          path="/dashboard/:slug"
+          element={<PrivateRoute Component={OrganizationDashboard} />}
+        />
+
+        <Route
+          path="/dashboard/:slug/workspace/:workspaceSlug"
+          element={<PrivateRoute Component={WorkspaceDashboard} />}
+        />
 
         <Route
           path="/onboarding"

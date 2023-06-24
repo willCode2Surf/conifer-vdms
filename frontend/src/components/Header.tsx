@@ -4,32 +4,33 @@ import { CheckCircle, Copy } from 'react-feather';
 import { useEffect, useState } from 'react';
 
 const Header = (props: {
-  organization: any | null,
+  entity: any | null;
+  property: string;
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
-  const [copied, setCopied] = useState(false)
-  if (!props.organization) return null;
-  const { organization } = props;
+  const [copied, setCopied] = useState(false);
+  if (!props.entity) return null;
+  const { entity, property } = props;
 
   const handleCopy = () => {
-    window.navigator.clipboard.writeText(organization.orgId);
-    setCopied(true)
-  }
+    window.navigator.clipboard.writeText(entity[property]);
+    setCopied(true);
+  };
 
   useEffect(() => {
     function manageCopy() {
       if (!copied) return false;
       setTimeout(() => {
-        setCopied(false)
-      }, 1500)
+        setCopied(false);
+      }, 1500);
     }
-    manageCopy()
-  }, [copied])
+    manageCopy();
+  }, [copied]);
 
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
-      <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
+      <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* <!-- Hamburger Toggle BTN --> */}
           <button
@@ -43,26 +44,31 @@ const Header = (props: {
             <span className="relative block h-5.5 w-5.5 cursor-pointer">
               <span className="du-block absolute right-0 h-full w-full">
                 <span
-                  className={`relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${!props.sidebarOpen && '!w-full delay-300'
-                    }`}
+                  className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${
+                    !props.sidebarOpen && '!w-full delay-300'
+                  }`}
                 ></span>
                 <span
-                  className={`relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white ${!props.sidebarOpen && 'delay-400 !w-full'
-                    }`}
+                  className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-150 duration-200 ease-in-out dark:bg-white ${
+                    !props.sidebarOpen && 'delay-400 !w-full'
+                  }`}
                 ></span>
                 <span
-                  className={`relative top-0 left-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white ${!props.sidebarOpen && '!w-full delay-500'
-                    }`}
+                  className={`relative left-0 top-0 my-1 block h-0.5 w-0 rounded-sm bg-black delay-200 duration-200 ease-in-out dark:bg-white ${
+                    !props.sidebarOpen && '!w-full delay-500'
+                  }`}
                 ></span>
               </span>
               <span className="absolute right-0 h-full w-full rotate-45">
                 <span
-                  className={`absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white ${!props.sidebarOpen && '!h-0 !delay-[0]'
-                    }`}
+                  className={`absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white ${
+                    !props.sidebarOpen && '!h-0 !delay-[0]'
+                  }`}
                 ></span>
                 <span
-                  className={`delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white ${!props.sidebarOpen && '!h-0 !delay-200'
-                    }`}
+                  className={`delay-400 absolute left-0 top-2.5 block h-0.5 w-full rounded-sm bg-black duration-200 ease-in-out dark:bg-white ${
+                    !props.sidebarOpen && '!h-0 !delay-200'
+                  }`}
                 ></span>
               </span>
             </span>
@@ -75,11 +81,21 @@ const Header = (props: {
         </div>
 
         <div className="hidden sm:block">
-          <div className='flex items-center gap-x-4'>
-            <p className='font-semibold text-slate-800 text-4xl'>{organization.name}</p>
-            <button onClick={handleCopy} disabled={copied} className='transition transition-duration-300 flex items-center gap-x-2 bg-slate-200 disabled:bg-green-300 px-4 py-2 rounded-md  font-mono text-slate-700 text-sm'>
-              <p className=''>ID: {organization.orgId}</p>
-              {copied ? <CheckCircle className='h-4 w-4' /> : <Copy className='h-4 w-4' />}
+          <div className="flex items-center gap-x-4">
+            <p className="text-4xl font-semibold text-slate-800">
+              {entity.name}
+            </p>
+            <button
+              onClick={handleCopy}
+              disabled={copied}
+              className="transition-duration-300 font-mono flex items-center gap-x-2 rounded-md bg-slate-200 px-4 py-2 text-sm  text-slate-700 transition disabled:bg-green-300"
+            >
+              <p className="">ID: {entity[property]}</p>
+              {copied ? (
+                <CheckCircle className="h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
             </button>
           </div>
         </div>

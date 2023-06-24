@@ -6,9 +6,11 @@ import { CodeBlock, vs2015 } from 'react-code-blocks';
 
 export default function DocumentsList({
   organization,
+  workspace,
   documents,
 }: {
   organization: any;
+  workspace: any;
   documents: any[];
 }) {
   return (
@@ -116,12 +118,18 @@ export default function DocumentsList({
           </div>
         </div>
       )}
-      <CodeExampleModal organization={organization} />
+      <CodeExampleModal organization={organization} workspace={workspace} />
     </div>
   );
 }
 
-const CodeExampleModal = ({ organization }: { organization: any }) => {
+const CodeExampleModal = ({
+  organization,
+  workspace,
+}: {
+  organization: any;
+  workspace: any;
+}) => {
   return (
     <dialog id="document-code-modal" className="w-1/2 rounded-lg">
       <div className="rounded-sm bg-white dark:border-strokedark dark:bg-boxdark">
@@ -169,7 +177,7 @@ await client.init({
 const pineconeIndex = client.Index('hackathon');
 const coniferInstance = new ConiferVDBMS({
   orgId: '${organization.orgId}',
-  workspaceId: 'workspace-xxxx', // Get from workspace page.
+  workspaceId: '${workspace.workspaceId}', // Get from workspace page.
   apiKey: 'ck-xxx' // Get from the api key at the top of the page.
 })
 

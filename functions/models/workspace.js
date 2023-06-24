@@ -29,7 +29,7 @@ const Workspace = {
       admins: [ownerUid],
       slug,
       ...inputs,
-    }
+    };
 
     const newOrg = await (
       await this.db()
@@ -55,7 +55,7 @@ const Workspace = {
         if (result.docs.length === 0) return [];
         return result.docs.map((doc) => {
           return { uid: doc.id, ...doc.data() };
-        })
+        });
       });
 
     return workspaces;
@@ -71,13 +71,15 @@ const Workspace = {
         if (result.docs.length === 0) return [];
         return result.docs.map((doc) => {
           return { uid: doc.id, ...doc.data() };
-        })
+        });
       });
 
     if (includeMetrics) {
       const { Document } = require('./document');
       for (const workspace of workspaces) {
-        workspace.documents = await Document.countForWorkspace(workspace.workspaceId);
+        workspace.documents = await Document.countForWorkspace(
+          workspace.workspaceId,
+        );
       }
     }
 
@@ -108,7 +110,7 @@ const Workspace = {
         if (result.docs.length === 0) return [];
         return result.docs.map((doc) => {
           return { uid: doc.id, ...doc.data() };
-        })
+        });
       });
     return orgs;
   },
@@ -118,6 +120,21 @@ const Workspace = {
     )
       .collection(this.collection)
       .where('slug', '==', slug)
+      .get()
+      .then((result) => {
+        if (result.docs.length === 0) return null;
+        const doc = result.docs[0];
+        return { uid: doc.id, ...doc.data() };
+      });
+    return org;
+  },
+  findBySlugInOrg: async function (slug, orgUid) {
+    const org = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('slug', '==', slug)
+      .where('orgUid', '==', orgUid)
       .get()
       .then((result) => {
         if (result.docs.length === 0) return null;

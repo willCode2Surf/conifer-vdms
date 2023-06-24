@@ -24,7 +24,6 @@ type IOrganization = {
   slug: string;
 };
 
-
 type IResult = {
   organization: IOrganization | null;
   error?: string | null;
@@ -32,14 +31,19 @@ type IResult = {
 
 const SignIn = () => {
   const [stage, setStage] = useState<IStages>('ready');
-  const [results, setResults] = useState<IResult>({ organization: null, error: null });
+  const [results, setResults] = useState<IResult>({
+    organization: null,
+    error: null,
+  });
   const resetStage = () => {
     setResults({ organization: null, error: null });
     setStage('ready');
   };
   const handleSubmit = async (e: React.FormEvent & FormTypes) => {
     e.preventDefault();
-    const { organization, error } = await Organization.createNew(e.target.name.value);
+    const { organization, error } = await Organization.createNew(
+      e.target.name.value
+    );
     if (!organization) setStage('failed');
     if (!!organization) {
       setStage('success');
@@ -135,9 +139,12 @@ function ShowStatus({
 function InputForm({ handleSubmit }: { handleSubmit: any }) {
   return (
     <>
-      <span className="mb-1.5 block text-2xl font-medium">First, you need to create an Organization.</span>
-      <p className='text-gray-600 text-base'>
-        Organizations are where all your documents are stored.<br />
+      <span className="mb-1.5 block text-2xl font-medium">
+        First, you need to create an Organization.
+      </span>
+      <p className="text-base text-gray-600">
+        Organizations are where all your documents are stored.
+        <br />
         You can have multiple organizations, but you need at least one.
       </p>
 

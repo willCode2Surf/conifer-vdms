@@ -43,11 +43,11 @@ const DocumentFragment = {
       .then((result) => {
         if (result.docs.length === 0) return [];
         return result.docs.map((doc) => {
-          return { uid: doc.id, ...doc.data() }
-        })
-      })
-    return fragments
-  }
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
+    return fragments;
+  },
 };
 
 module.exports.DocumentFragment = DocumentFragment;

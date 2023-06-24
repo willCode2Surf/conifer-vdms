@@ -1,6 +1,6 @@
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const uuidAPIKey = require('uuid-apikey');
-const slugify = require('slugify')
+const slugify = require('slugify');
 const { ApiKey } = require('./apiKey');
 
 const Organization = {
@@ -29,7 +29,7 @@ const Organization = {
       admins: [ownerUid],
       slug,
       ...inputs,
-    }
+    };
 
     const newOrg = await (
       await this.db()
@@ -45,7 +45,7 @@ const Organization = {
 
     await ApiKey.createNew({
       organizationUid: newOrg.uid,
-      createdBy: ownerUid
+      createdBy: ownerUid,
     });
 
     return newOrg;
@@ -75,7 +75,7 @@ const Organization = {
         if (result.docs.length === 0) return [];
         return result.docs.map((doc) => {
           return { uid: doc.id, ...doc.data() };
-        })
+        });
       });
     return orgs;
   },

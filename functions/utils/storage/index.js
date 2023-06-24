@@ -57,12 +57,10 @@ async function readFile(filenamePath) {
   return text;
 }
 
-
 async function fetchMetadata(filenamePath) {
   return await fetch(
     `${STORAGE_BASE}/${encodeURIComponent(filenamePath)}`,
-  )
-    .then(res => res.json())
+  ).then((res) => res.json());
 }
 
 module.exports = {

@@ -1,6 +1,9 @@
 // Sets up the base headers for all authenticated requests so that we are able to prevent
 // basic spoofing since a valid token is required and that cannot be spoofed
-export function baseHeaders(providedEmail = null, providedToken = null): HeadersInit {
+export function baseHeaders(
+  providedEmail = null,
+  providedToken = null
+): HeadersInit {
   const email =
     providedEmail ||
     JSON.parse(window.localStorage.getItem('conifer_user')).email;

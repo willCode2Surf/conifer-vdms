@@ -6,8 +6,8 @@ import paths from '../utils/paths';
 import { Box, ChevronUp, Command } from 'react-feather';
 
 interface SidebarProps {
-  organizations: any,
-  workspaces: object[],
+  organizations: any;
+  workspaces: object[];
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
 }
@@ -16,7 +16,7 @@ const Sidebar = ({
   organizations,
   workspaces,
   sidebarOpen,
-  setSidebarOpen
+  setSidebarOpen,
 }: SidebarProps) => {
   const { slug } = useParams();
   const location = useLocation();
@@ -68,8 +68,9 @@ const Sidebar = ({
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-slate-900 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-slate-900 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
@@ -122,10 +123,11 @@ const Sidebar = ({
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/' ||
-                          pathname.includes('dashboard')) &&
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          (pathname === '/' ||
+                            pathname.includes('dashboard')) &&
                           'bg-graydark dark:bg-meta-4'
-                          }`}
+                        }`}
                         onClick={(e) => {
                           e.preventDefault();
                           sidebarExpanded
@@ -133,14 +135,19 @@ const Sidebar = ({
                             : setSidebarExpanded(true);
                         }}
                       >
-                        <Command className='h-4 w-4' />
+                        <Command className="h-4 w-4" />
                         Organizations
-                        <ChevronUp className={`h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`} />
+                        <ChevronUp
+                          className={`absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 fill-current ${
+                            open && 'rotate-180'
+                          }`}
+                        />
                       </NavLink>
                       {/* <!-- Dropdown Menu Start --> */}
                       <div
-                        className={`translate transform overflow-hidden ${!open && 'hidden'
-                          }`}
+                        className={`translate transform overflow-hidden ${
+                          !open && 'hidden'
+                        }`}
                       >
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           {organizations.map((org: any, i: number) => {
@@ -157,7 +164,7 @@ const Sidebar = ({
                                   {org.name}
                                 </NavLink>
                               </li>
-                            )
+                            );
                           })}
                         </ul>
                       </div>
@@ -170,24 +177,23 @@ const Sidebar = ({
             </ul>
           </div>
 
-          {(!!slug && workspaces?.length > 0) && (
+          {!!slug && workspaces?.length > 0 && (
             <div>
               <ul className="mb-6 flex flex-col gap-1.5">
                 {/* <!-- Menu Item Dashboard --> */}
                 <SidebarLinkGroup
-                  activeCondition={
-                    pathname.includes('dashboard')
-                  }
+                  activeCondition={pathname.includes('dashboard')}
                 >
                   {(handleClick, open) => {
                     return (
                       <React.Fragment>
                         <NavLink
                           to="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${(pathname === '/' ||
-                            pathname.includes('dashboard')) &&
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                            (pathname === '/' ||
+                              pathname.includes('dashboard')) &&
                             'bg-graydark dark:bg-meta-4'
-                            }`}
+                          }`}
                           onClick={(e) => {
                             e.preventDefault();
                             sidebarExpanded
@@ -195,14 +201,19 @@ const Sidebar = ({
                               : setSidebarExpanded(true);
                           }}
                         >
-                          <Box className='h-4 w-4' />
+                          <Box className="h-4 w-4" />
                           Workspaces
-                          <ChevronUp className={`h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 fill-current ${open && 'rotate-180'}`} />
+                          <ChevronUp
+                            className={`absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 fill-current ${
+                              open && 'rotate-180'
+                            }`}
+                          />
                         </NavLink>
                         {/* <!-- Dropdown Menu Start --> */}
                         <div
-                          className={`translate transform overflow-hidden ${!open && 'hidden'
-                            }`}
+                          className={`translate transform overflow-hidden ${
+                            !open && 'hidden'
+                          }`}
                         >
                           <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                             {workspaces?.map((workspace: any, i: number) => {
@@ -210,7 +221,7 @@ const Sidebar = ({
                                 <li key={i}>
                                   <NavLink
                                     key={workspace.uid}
-                                    to={paths.workspace(slug, workspace.uid)}
+                                    to={paths.workspace(slug, workspace.slug)}
                                     className={({ isActive }) =>
                                       'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                       (isActive && '!text-white')
@@ -219,7 +230,7 @@ const Sidebar = ({
                                     {workspace.name}
                                   </NavLink>
                                 </li>
-                              )
+                              );
                             })}
                           </ul>
                         </div>
@@ -232,12 +243,10 @@ const Sidebar = ({
               </ul>
             </div>
           )}
-
-
         </nav>
         {/* <!-- Sidebar Menu --> */}
-      </div >
-    </aside >
+      </div>
+    </aside>
   );
 };
 

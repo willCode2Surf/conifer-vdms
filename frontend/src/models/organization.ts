@@ -42,33 +42,34 @@ const Organization = {
   stats: async (slug: string, metric: string) => {
     return fetch(`${API_BASE}/v1/org/${slug}/statistics/${metric}`, {
       method: 'GET',
-      cache: 'no-cache',
       headers: baseHeaders(),
-    }).then((res) => res.json())
+    }).then((res) => res.json());
   },
   documents: async (slug: string) => {
     return fetch(`${API_BASE}/v1/org/${slug}/documents`, {
       method: 'GET',
       cache: 'no-cache',
       headers: baseHeaders(),
-    }).then((res) => res.json())
-      .then(res => res?.documents || [])
+    })
+      .then((res) => res.json())
+      .then((res) => res?.documents || [])
       .catch((e) => {
-        console.error(e)
-        return []
-      })
+        console.error(e);
+        return [];
+      });
   },
   apiKey: async (slug: string) => {
     return fetch(`${API_BASE}/v1/org/${slug}/api-key`, {
       method: 'GET',
       cache: 'no-cache',
       headers: baseHeaders(),
-    }).then((res) => res.json())
-      .then(res => res?.apiKey || null)
+    })
+      .then((res) => res.json())
+      .then((res) => res?.apiKey || null)
       .catch((e) => {
-        console.error(e)
+        console.error(e);
         return null;
-      })
+      });
   },
 };
 

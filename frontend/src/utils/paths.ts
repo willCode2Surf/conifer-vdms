@@ -20,12 +20,12 @@ const paths = {
   organization: function ({ slug }: { slug: string }) {
     return `/dashboard/${slug}`;
   },
-  workspace: function (slug: string, workspaceUid: string) {
-    return `/dashboard/${slug}/workspace/${workspaceUid}`;
+  workspace: function (slug: string, workspaceSlug: string) {
+    return `/dashboard/${slug}/workspace/${workspaceSlug}`;
   },
-  document: function (slug: string, workspaceUid: string, docId: string) {
-    return `/dashboard/${slug}/workspace/${workspaceUid}/document/${docId}`;
-  }
+  document: function (slug: string, workspaceSlug: string, docId: string) {
+    return `/dashboard/${slug}/workspace/${workspaceSlug}/document/${docId}`;
+  },
 };
 
 export default paths;

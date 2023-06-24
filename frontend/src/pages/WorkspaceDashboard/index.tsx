@@ -11,18 +11,22 @@ import WorkspacesList from './WorkspacesList';
 import DocumentsList from './DocumentsList';
 import Organization from '../../models/organization';
 import ApiKeyCard from './ApiKey';
+import Workspace from '../../models/workspace';
 
-export default function Dashboard() {
-  const { slug } = useParams();
+export default function WorkspaceDashboard() {
   const { user } = useUser();
+  const { slug, workspaceSlug } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
   const [organizations, setOrganizations] = useState<object[]>([]);
   const [organization, setOrganization] = useState<object | null>(null);
   const [workspaces, setWorkspaces] = useState<object[]>([]);
+  const [workspace, setWorkspace] = useState<object[]>([]);
   const [documents, setDocuments] = useState<object[]>([]);
 
   useEffect(() => {
     async function userOrgs() {
+      if (!slug || !workspaceSlug) return false;
+
       const orgs = await User.organizations();
       if (orgs.length === 0) {
         window.location.replace(paths.onboarding());
@@ -30,18 +34,23 @@ export default function Dashboard() {
       }
 
       const _workspaces = await User.workspaces();
-      const _documents = slug ? await Organization.documents(slug) : [];
+      const _documents = slug
+        ? await Workspace.documents(slug, workspaceSlug)
+        : [];
 
       setOrganizations(orgs);
-      setOrganization(orgs?.find((org: any) => org.slug === slug) || orgs?.[0]);
+      setOrganization(orgs?.find((org: any) => org.slug === slug) || null);
       setWorkspaces(_workspaces);
+      setWorkspace(
+        _workspaces?.find((ws: any) => ws.slug === workspaceSlug) || null
+      );
       setDocuments(_documents);
       setLoading(false);
     }
     userOrgs();
   }, [user.uid]);
 
-  if (loading || organizations.length === 0 || !organization) {
+  if (loading || organizations.length === 0) {
     return (
       <DefaultLayout>
         <FullScreenLoader />
@@ -51,24 +60,27 @@ export default function Dashboard() {
 
   return (
     <AppLayout
-      headerEntity={organization}
-      headerProp="orgId"
+      headerEntity={workspace}
+      headerProp="workspaceId"
       organizations={organizations}
       organization={organization}
       workspaces={workspaces}
     >
-      {!!organization && (
+      {organization && (
         <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
           <ApiKeyCard organization={organization} />
         </div>
       )}
 
-      <Statistics organization={organization} />
+      <Statistics workspace={workspace} />
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="col-span-12 xl:col-span-8">
-          <DocumentsList organization={organization} documents={documents} />
+        <div className="col-span-12 xl:col-span-12">
+          <DocumentsList
+            organization={organization}
+            workspace={workspace}
+            documents={documents}
+          />
         </div>
-        <WorkspacesList organization={organization} workspaces={workspaces} />
       </div>
     </AppLayout>
   );

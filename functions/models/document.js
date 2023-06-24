@@ -40,9 +40,9 @@ const Document = {
       .get()
       .then((doc) => {
         if (!doc.exists) return null;
-        return { uid: doc.id, ...doc.data() }
-      })
-    return existingDocument
+        return { uid: doc.id, ...doc.data() };
+      });
+    return existingDocument;
   },
   updateQuick: async function (docId, updates) {
     if (!docId) {
@@ -70,21 +70,23 @@ const Document = {
       .get()
       .then((results) => {
         return results.docs.map((doc) => {
-          return { uid: doc.id, ...doc.data() }
-        })
-      })
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
 
     const workspaces = await Workspace.byOrgUid(orgUid);
     for (const document of documents) {
       try {
-        document.workspace = workspaces.find((workspace) => workspace.workspaceId === document.workspaceId);
+        document.workspace = workspaces.find(
+          (workspace) => workspace.workspaceId === document.workspaceId,
+        );
         document.organizationUid = orgUid;
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     }
 
-    return documents
+    return documents;
   },
   countForOrg: async function (organizationId) {
     return await (
@@ -94,19 +96,8 @@ const Document = {
       .where('organizationId', '==', organizationId)
       .get()
       .then((snapshot) => {
-        return snapshot.size
-      })
-  },
-  countForWorkspace: async function (workspaceId) {
-    return await (
-      await this.db()
-    )
-      .collection(this.collection)
-      .where('workspaceId', '==', workspaceId)
-      .get()
-      .then((snapshot) => {
-        return snapshot.size
-      })
+        return snapshot.size;
+      });
   },
   calcVectors: async function (organizationId) {
     const documents = await (
@@ -117,9 +108,9 @@ const Document = {
       .get()
       .then((results) => {
         return results.docs.map((doc) => {
-          return { uid: doc.id, ...doc.data() }
-        })
-      })
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
 
     var vectorCount = 0;
     for (const document of documents) {
@@ -127,7 +118,7 @@ const Document = {
         const cache = await readJSON(document.cacheFilepath);
         vectorCount += cache.vectors.length;
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     }
 
@@ -142,9 +133,9 @@ const Document = {
       .get()
       .then((results) => {
         return results.docs.map((doc) => {
-          return { uid: doc.id, ...doc.data() }
-        })
-      })
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
 
     var totalBytes = 0;
     for (const document of documents) {
@@ -152,7 +143,83 @@ const Document = {
         const metadata = await fetchMetadata(document.cacheFilepath);
         totalBytes += Number(metadata?.size);
       } catch (e) {
-        console.error(e)
+        console.error(e);
+      }
+    }
+
+    return totalBytes;
+  },
+  byWorkspace: async function (workspaceId) {
+    const documents = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('workspaceId', '==', workspaceId)
+      .get()
+      .then((results) => {
+        return results.docs.map((doc) => {
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
+
+    return documents;
+  },
+  countForWorkspace: async function (workspaceId) {
+    return await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('workspaceId', '==', workspaceId)
+      .get()
+      .then((snapshot) => {
+        return snapshot.size;
+      });
+  },
+  calcVectorsWorkspace: async function (workspaceId) {
+    const documents = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('workspaceId', '==', workspaceId)
+      .get()
+      .then((results) => {
+        return results.docs.map((doc) => {
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
+
+    var vectorCount = 0;
+    for (const document of documents) {
+      try {
+        const cache = await readJSON(document.cacheFilepath);
+        vectorCount += cache.vectors.length;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    return vectorCount;
+  },
+  calcVectorCacheWorkspace: async function (workspaceId) {
+    const documents = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .where('workspaceId', '==', workspaceId)
+      .get()
+      .then((results) => {
+        return results.docs.map((doc) => {
+          return { uid: doc.id, ...doc.data() };
+        });
+      });
+
+    var totalBytes = 0;
+    for (const document of documents) {
+      try {
+        const metadata = await fetchMetadata(document.cacheFilepath);
+        totalBytes += Number(metadata?.size);
+      } catch (e) {
+        console.error(e);
       }
     }
 

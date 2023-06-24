@@ -1,5 +1,5 @@
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
-const uuidAPIKey = require('uuid-apikey')
+const uuidAPIKey = require('uuid-apikey');
 
 const ApiKey = {
   collection: 'api_keys',
@@ -40,7 +40,7 @@ const ApiKey = {
       .get()
       .then((result) => {
         if (!result.docs.length === 0) return null;
-        const doc = result.docs[0]
+        const doc = result.docs[0];
         return { uid: doc.id, ...doc.data() };
       });
 
@@ -55,7 +55,7 @@ const ApiKey = {
       .get()
       .then((result) => {
         if (!result.docs.length === 0) return null;
-        const doc = result.docs[0]
+        const doc = result.docs[0];
         return { uid: doc.id, ...doc.data() };
       });
 
