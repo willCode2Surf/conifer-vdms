@@ -18,6 +18,43 @@ const Organization = {
   makeKey: () => {
     return `org-${uuidAPIKey.create().apiKey}`;
   },
+  createDemo: async function (ownerUid, inputs = {}) {
+    var slug = slugify(inputs.name, { lower: true });
+    const existingBySlug = await this.findBySlug(slug);
+
+    if (!!existingBySlug) {
+      const slugSeed = Math.floor(10000000 + Math.random() * 90000000);
+      slug = slugify(`${inputs.name}-${slugSeed}`, { lower: true });
+    }
+
+    const recordData = {
+      ...this.baseRecord,
+      admins: [ownerUid],
+      slug,
+      ...inputs,
+      orgId: this.makeKey(),
+    };
+
+    const newOrg = await (
+      await this.db()
+    )
+      .collection(this.collection)
+      .doc('demo')
+      .create(recordData)
+      .then((docRef) => {
+        return {
+          uid: docRef.id,
+          ...recordData,
+        };
+      });
+
+    await ApiKey.createNew({
+      organizationUid: 'demo',
+      createdBy: ownerUid,
+    });
+
+    return newOrg;
+  },
   createNew: async function (ownerUid, inputs = {}) {
     var slug = slugify(inputs.name, { lower: true });
     const existingBySlug = await this.findBySlug(slug);
@@ -125,6 +162,15 @@ const Organization = {
         return { uid: doc.id, ...doc.data() };
       });
     return org;
+  },
+  updateTimestamp: async function (orgUid) {
+    if (!orgUid) {
+      return null;
+    }
+
+    await (await this.db()).collection(this.collection).doc(orgUid).update({
+      updatedAt: FieldValue.serverTimestamp(),
+    });
   },
   updateQuick: async function (orgUid, updates) {
     if (!orgUid) {

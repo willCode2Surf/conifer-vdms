@@ -149,7 +149,7 @@ Be sure you have the correct packages installed!
 example: package.json
 { 
   "dependencies": {
-    "@mintplex-labs/langchain": "https://gitpkg.now.sh/Mintplex-Labs/langchainjs/langchain?confier",
+    "@mintplex-labs/langchain": "https://gitpkg.now.sh/Mintplex-Labs/langchainjs/langchain?conifer",
     ...other deps
 }
 */
@@ -186,7 +186,7 @@ await PineconeStore.fromDocumentsVerbose(
 )
 
 // Documents will now exist in Conifer!
-// More CRUD methods available at https://docs.conifer.com
+// More CRUD methods available at ${window.location.origin}/api-docs
 `}
             language="javascript"
             showLineNumbers={false}

@@ -3,7 +3,7 @@ import { NavLink, useLocation, useParams } from 'react-router-dom';
 import Logo from '../images/logo/logo.svg';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import paths from '../utils/paths';
-import { Box, ChevronUp, Command } from 'react-feather';
+import { Box, ChevronUp, Code, Command } from 'react-feather';
 import Organization from '../models/organization';
 import PreLoader from './Preloader';
 
@@ -247,6 +247,14 @@ const Sidebar = ({
                                 );
                               })}
                             </ul>
+                            <NavLink
+                              to="/api-docs"
+                              target="_blank"
+                              className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4`}
+                            >
+                              <Code className="h-4 w-4" />
+                              API Documentation
+                            </NavLink>
                           </div>
                           {/* <!-- Dropdown Menu End --> */}
                         </React.Fragment>

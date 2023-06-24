@@ -10,7 +10,7 @@
     "start:firebase": "firebase emulators:start",
     "lint": "cd frontend && yarn lint && cd ../functions && yarn lint",
     "deploy:hosting": "cd frontend && yarn build && cd .. && firebase deploy --only hosting",
-    "deploy:functions": "firebase deploy --only functions",
+    "deploy:functions": "firebase use conifer-tools && firebase deploy --only functions",
     "deploy:functions:frontend": "firebase deploy --only functions:frontend",
     "deploy:functions:api": "firebase deploy --only functions:api"
   },

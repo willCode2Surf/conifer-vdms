@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../images/logo/logo-icon.svg';
 import { CheckCircle, Copy } from 'react-feather';
 import { useEffect, useState } from 'react';
+import paths from '../utils/paths';
 
 const Header = (props: {
   entity: any | null;
@@ -81,22 +82,35 @@ const Header = (props: {
           </Link>
         </div>
 
-        <div className="hidden sm:block">
-          <div className="flex items-center gap-x-4">
-            <p className="text-4xl font-semibold text-slate-800">
-              {entity[nameProp ?? 'name']}
-            </p>
+        <div className="hidden w-full sm:block">
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-x-4">
+              <p className="text-4xl font-semibold text-slate-800">
+                {entity[nameProp ?? 'name']}
+              </p>
+              <button
+                onClick={handleCopy}
+                disabled={copied}
+                className="transition-duration-300 font-mono flex items-center gap-x-2 rounded-md bg-slate-200 px-4 py-2 text-sm  text-slate-700 transition disabled:bg-green-300"
+              >
+                <p className="">ID: {entity[property]}</p>
+                {copied ? (
+                  <CheckCircle className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </button>
+            </div>
             <button
-              onClick={handleCopy}
-              disabled={copied}
-              className="transition-duration-300 font-mono flex items-center gap-x-2 rounded-md bg-slate-200 px-4 py-2 text-sm  text-slate-700 transition disabled:bg-green-300"
+              onClick={() => {
+                if (!window) return;
+                window.localStorage.removeItem('conifer_user');
+                window.localStorage.removeItem('conifer_authToken');
+                window.location.replace(paths.home());
+              }}
+              className="rounded-lg px-4 py-2 text-slate-800 hover:bg-slate-200"
             >
-              <p className="">ID: {entity[property]}</p>
-              {copied ? (
-                <CheckCircle className="h-4 w-4" />
-              ) : (
-                <Copy className="h-4 w-4" />
-              )}
+              Logout
             </button>
           </div>
         </div>

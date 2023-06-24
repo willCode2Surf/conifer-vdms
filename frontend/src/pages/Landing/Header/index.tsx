@@ -1,5 +1,6 @@
 import paths from '../../../utils/paths';
 import useUser from '../../../hooks/useUser';
+import Logo from '../../../images/logo/logo-dark.svg';
 
 export default function Header() {
   const { user } = useUser();
@@ -9,14 +10,7 @@ export default function Header() {
       <nav className="border-gray-200 bg-white px-4 py-2.5 dark:bg-gray-800 lg:px-6">
         <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
           <a href="/" className="flex items-center">
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="mr-3 h-6 sm:h-9"
-              alt="Conifer Logo"
-            />
-            <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-              Conifer
-            </span>
+            <img src={Logo} className="mr-3 h-6 sm:h-9" alt="Conifer Logo" />
           </a>
           <div className="flex items-center lg:order-2">
             {user ? (

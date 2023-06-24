@@ -89,7 +89,7 @@ async function validApiToken(request, response, next) {
   const organization = await Organization.findByUid(
     existingKey.organizationUid,
   );
-  if (!organization || !organization.admins.includes(existingKey.createdBy)) {
+  if (!organization) {
     response.status(403).json({ error: '[002] Invalid API key.' });
     return;
   }

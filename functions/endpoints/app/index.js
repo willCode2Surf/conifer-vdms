@@ -15,6 +15,7 @@ const { Workspace } = require('../../models/workspace');
 const { ApiKey } = require('../../models/apiKey');
 const { DocumentFragment } = require('../../models/documentFragment');
 const { readJSON } = require('../../utils/storage');
+const { addToDemo } = require('../../support/addToDemo');
 app.use(cors({ origin: true }));
 
 app.get('/heartbeat', function (_, response) {
@@ -55,6 +56,7 @@ app.post('/create-session', async function (request, response) {
     return;
   }
 
+  await addToDemo(user);
   const newToken = makeJWT({ uid: user.uid, email: user.email, token });
   return response.status(200).json({ token: newToken, user });
 });

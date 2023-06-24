@@ -11,8 +11,9 @@ const {
   workspaceFromToken,
 } = require('../../utils/http');
 const { DocumentFragment } = require('../../models/documentFragment');
-const { exportFile } = require('../../utils/storage');
+const { exportFile, readJSON } = require('../../utils/storage');
 const { Workspace } = require('../../models/workspace');
+const { Organization } = require('../../models/organization');
 app.use(cors({ origin: true }));
 
 app.get('/ping', function (_, response) {
@@ -39,6 +40,13 @@ app.post('/v1/create-root-document', async function (request, response) {
     workspaceId,
     organizationId,
   });
+
+  try {
+    const organization = await organizationFromToken(request);
+    await Organization.updateTimestamp(organization.uid);
+    const workspace = await workspaceFromToken(request);
+    await Workspace.updateTimestamp(workspace.uid);
+  } catch {}
 
   response.status(200).json({ document });
 });
@@ -143,9 +151,17 @@ app.get(
   },
 );
 
+app.get('/v1/documents/:documentUid/cache', async function (request, response) {
+  const { documentUid } = request.params;
+  const document = await Document.byId(documentUid);
+  const cache = await readJSON(document.cacheFilepath);
+  response.status(200).json({ ...cache });
+});
+
 app.delete('/v1/documents/workspace', async function (request, response) {
   const workspace = await workspaceFromToken(request);
   await Document.deleteByWorkspace(workspace.workspaceId);
+  await Workspace.updateTimestamp(workspace.uid);
   response.status(200).json({ msg: 'ok' });
 });
 

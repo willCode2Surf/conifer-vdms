@@ -15,7 +15,7 @@ const Stytch = new stytch.Client({
 const LOGIN_PATH =
   process.env.FUNCTIONS_EMULATOR === 'true'
     ? 'http://localhost:3000/authenticate/stytch'
-    : 'https://conifer.db/authenticate';
+    : 'https://conifer-tools.web.app/authenticate/stytch';
 
 async function sendAuthEmail({ email }) {
   if (!email) return false;

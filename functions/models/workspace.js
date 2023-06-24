@@ -160,8 +160,20 @@ const Workspace = {
       });
     return org;
   },
-  updateQuick: async function (orgUid, updates) {
-    if (!orgUid) {
+  updateTimestamp: async function (workspaceUid) {
+    if (!workspaceUid) {
+      return null;
+    }
+
+    await (await this.db())
+      .collection(this.collection)
+      .doc(workspaceUid)
+      .update({
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+  },
+  updateQuick: async function (workspaceUid, updates) {
+    if (!workspaceUid) {
       return null;
     }
 
@@ -169,7 +181,7 @@ const Workspace = {
       await this.db()
     )
       .collection(this.collection)
-      .doc(orgUid)
+      .doc(workspaceUid)
       .update({
         ...updates,
         updatedAt: FieldValue.serverTimestamp(),

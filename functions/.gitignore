@@ -3,3 +3,4 @@ exports
 *.log
 
 .env.*
+!.env.example

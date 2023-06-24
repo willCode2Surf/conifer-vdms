@@ -2,6 +2,7 @@ import { Code, Lock, Settings, Zap } from 'react-feather';
 import Header from './Header';
 import paths from '../../utils/paths';
 import useUser from '../../hooks/useUser';
+import Logo from '../../images/logo/logo-dark.svg';
 
 export default function Landing() {
   const { user } = useUser();
@@ -11,17 +12,17 @@ export default function Landing() {
       <Header />
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto grid max-w-screen-xl px-4 py-8 lg:grid-cols-12 lg:gap-8 lg:py-16 xl:gap-0">
-          <div className="mr-auto place-self-center lg:col-span-7">
+          <div className="mr-auto place-self-center lg:col-span-5">
             <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none dark:text-white md:text-3xl xl:text-5xl">
-              Vector Database Management made easy.
+              Vector Database Management Solutions.
             </h1>
             <p className="mb-6 max-w-2xl font-light text-gray-500 dark:text-gray-400 md:text-lg lg:mb-8 lg:text-xl">
-              Manage thousands of vectorized documents without any of the
-              headache while savings hundreds on embedding costs.
+              If you cant see exactly <i>what</i> is in your vector database -
+              you should be using Conifer.
             </p>
             <div className="flex items-center gap-x-2">
               <a
-                href="#"
+                href="mailto:team@mintplex.xyz"
                 className="inline-flex items-center justify-center rounded-lg px-5 py-3 text-center text-base font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
               >
                 Contact Us
@@ -44,9 +45,9 @@ export default function Landing() {
               )}
             </div>
           </div>
-          <div className="hidden lg:col-span-5 lg:mt-0 lg:flex">
+          <div className="hidden rounded-lg border-4 border-gray-500 shadow-lg lg:col-span-7 lg:mt-0 lg:flex">
             <img
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png"
+              src="https://github.com/Mintplex-Labs/langchainjs/raw/conifer/docs/static/img/conifer.png"
               alt="mockup"
             />
           </div>
@@ -79,15 +80,15 @@ export default function Landing() {
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-16 lg:px-6">
           <div className="mb-8 max-w-screen-md lg:mb-16">
             <h2 className="mb-4 text-4xl font-extrabold text-gray-900 dark:text-white">
-              Designed for future-proof business like yours
+              Built for developers, designed for businesses.
             </h2>
             <p className="text-gray-500 dark:text-gray-400 sm:text-xl">
-              We do all the heavy lifting for you to enable your business to use
-              vector databases that transforms your documents into searchable
-              and conversable data points.
+              We do all the heavy lifting for you to enable your business and
+              your engineering team to use vector databases without losing track
+              of what is embedded or being unable to manage it.
               <br />
-              Unlocking new processes and products at{' '}
-              <i>the speed of thought</i>.
+              Conifer unlocks new processes and products at{' '}
+              <i>the speed of thought</i> by simplifying vector databases.
             </p>
           </div>
           <div className="space-y-8 md:grid md:grid-cols-2 md:gap-12 md:space-y-0 lg:grid-cols-3">
@@ -110,7 +111,8 @@ export default function Landing() {
                 Fast Integration
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                Add documents into Conifer in minutes with no fuss.
+                Add documents into Conifer in minutes with no fuss and very
+                little code change.
               </p>
             </div>
             <div>
@@ -170,8 +172,7 @@ export default function Landing() {
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
                 Using our API and SDKs you can add Conifer into your workflow in
-                minutes to get better control of your vector database with both
-                developer and production environment separation.
+                minutes to get better control of your vector database.
               </p>
             </div>
             <div>
@@ -223,17 +224,25 @@ export default function Landing() {
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
             <h2 className="mb-4 text-4xl font-extrabold leading-tight text-gray-900 dark:text-white">
-              Take control of your vector database
+              Finally understand what is in your vector database
             </h2>
             <p className="mb-6 font-light text-gray-500 dark:text-gray-400 md:text-lg">
-              Try Conifer today and simplify your life. No credit card required.
+              Try Conifer today for free.
             </p>
-            <a
-              href={paths.signUp()}
-              className="rounded-lg border border-blue-600 px-5 py-2.5 text-lg text-sm font-medium text-blue-600 hover:border-transparent hover:bg-blue-50 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-            >
-              Create an account
-            </a>
+            <div className="mx-auto flex justify-center gap-x-2">
+              <a
+                href={paths.signUp()}
+                className="rounded-lg border border-blue-600 px-5 py-2.5 text-lg text-sm font-medium text-blue-600 hover:border-transparent hover:bg-blue-50 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+              >
+                Create an account
+              </a>
+              <a
+                href="/api-docs"
+                className="rounded-lg px-5 py-2.5 text-lg text-sm font-medium text-blue-600 hover:border-transparent hover:bg-blue-50 hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+              >
+                See API Docs
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -243,14 +252,7 @@ export default function Landing() {
           <div className="md:flex md:justify-between">
             <div className="mb-6 md:mb-0">
               <a href="/" className="flex items-center">
-                <img
-                  src="https://flowbite.com/docs/images/logo.svg"
-                  className="mr-3 h-8"
-                  alt="FlowBite Logo"
-                />
-                <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
-                  Conifer
-                </span>
+                <img src={Logo} className="mr-3 h-8" alt="Logo" />
               </a>
             </div>
             <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6">

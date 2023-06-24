@@ -9,6 +9,11 @@
     "preview": "vite preview",
     "lint": "yarn prettier --write ./src"
   },
+  "overrides": {
+    "react-syntax-highlighter": {
+      "refractor": "~3.3.1"
+    }
+  },
   "dependencies": {
     "@metamask/jazzicon": "^2.0.0",
     "apexcharts": "^3.37.0",
