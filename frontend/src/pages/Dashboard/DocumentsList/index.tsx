@@ -13,12 +13,22 @@ export default function DocumentsList({
 }) {
   return (
     <div className="col-span-12 flex-1 rounded-sm border border-stroke bg-white py-6 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between px-4">
         <div>
           <h4 className="mb-6 px-7.5 text-xl font-semibold text-black dark:text-white">
             Documents {documents.length > 0 ? `(${documents.length})` : ''}
           </h4>
         </div>
+        {documents.length > 0 && (
+          <button
+            onClick={() => {
+              document.getElementById('document-code-modal')?.showModal();
+            }}
+            className="text-sm text-blue-500 underline"
+          >
+            How to add documents?
+          </button>
+        )}
       </div>
 
       {documents.length > 0 ? (
@@ -139,6 +149,8 @@ const CodeExampleModal = ({ organization }: { organization: any }) => {
           During the Pinecone Hackathon the library is a standalone fork of
           langchainJS, but ideally it would eventually be live in the main
           LangchainJS repo :)
+          <br />
+          We werent able to add uploading or deleting docs via the UI but how cool would that be. It can be done via the library though.
         </p>
 
         <div className="max-h-[50vh] w-full overflow-y-scroll bg-slate-50">

@@ -8,6 +8,7 @@ import AppLayout from '../../layout/AppLayout';
 import { useParams } from 'react-router-dom';
 import Workspace from '../../models/workspace';
 import FragmentList from './FragmentList';
+import Organization from '../../models/organization';
 
 export default function DocumentView() {
   const { user } = useUser();
@@ -28,19 +29,21 @@ export default function DocumentView() {
         return false;
       }
 
-      const _workspaces = await User.workspaces();
+      const focusedOrg =
+        orgs?.find((org: any) => org.slug === slug) || orgs?.[0];
+      const _workspaces = await Organization.workspaces(focusedOrg.slug);
       const _documents = slug
         ? await Workspace.documents(slug, workspaceSlug)
         : [];
 
       setOrganizations(orgs);
-      setOrganization(orgs?.find((org: any) => org.slug === slug) || null);
+      setOrganization(focusedOrg);
       setWorkspaces(_workspaces);
       setDocument(_documents?.find((doc: any) => doc.uid === docUid) || null);
       setLoading(false);
     }
     userOrgs();
-  }, [user.uid]);
+  }, [user.uid, window.location.pathname]);
 
   if (loading || organizations.length === 0) {
     return (
