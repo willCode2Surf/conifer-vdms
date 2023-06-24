@@ -97,6 +97,9 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      <div className='mt-4 w-fit mx-auto p-4 rounded-lg bg-orange-50 border border-orange-800 text-orange-800 font-semibold'>
+        Conifer was built as a submission to the Pinecone.io Hackathon. Some features outlined fell out of scope or where cut for time, but the vision is there and the base product works. Enjoy :)
+      </div>
     </header>
   );
 }
