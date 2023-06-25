@@ -11,10 +11,10 @@ export default function Landing() {
     <>
       <Header />
       <section className="bg-white dark:bg-gray-900">
-        <div className="mx-auto grid max-w-screen-xl px-4 py-8 lg:grid-cols-12 lg:gap-8 lg:py-16 xl:gap-0">
+        <div className="mx-auto grid max-w-screen-xl px-4 py-8 lg:grid-cols-12 lg:gap-8 lg:py-16 xl:gap-2">
           <div className="mr-auto place-self-center lg:col-span-5">
-            <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none dark:text-white md:text-3xl xl:text-5xl">
-              Vector Database Management Solutions.
+            <h1 className="mb-4 max-w-2xl text-4xl font-extrabold leading-none dark:text-white md:text-3xl xl:text-4xl">
+              Vector Database Management you can understand.
             </h1>
             <p className="mb-6 max-w-2xl font-light text-gray-500 dark:text-gray-400 md:text-lg lg:mb-8 lg:text-xl">
               If you cant see exactly <i>what</i> is in your vector database -
@@ -87,8 +87,7 @@ export default function Landing() {
               your engineering team to use vector databases without losing track
               of what is embedded or being unable to manage it.
               <br />
-              Conifer unlocks new processes and products at{' '}
-              <i>the speed of thought</i> by simplifying vector databases.
+              Now you can use the database of the future without losing the familiar feel of a traditional DBMS.
             </p>
           </div>
           <div className="space-y-8 md:grid md:grid-cols-2 md:gap-12 md:space-y-0 lg:grid-cols-3">
@@ -99,8 +98,7 @@ export default function Landing() {
               <h3 className="mb-2 text-xl font-bold dark:text-white">Secure</h3>
               <p className="text-gray-500 dark:text-gray-400">
                 Your vectors are safe with us. Bring your own Pinecone instance
-                or use our cloud hosted instance. Either way, your documents are
-                safe.
+                and we stay in sync.
               </p>
             </div>
             <div>
@@ -111,7 +109,7 @@ export default function Landing() {
                 Fast Integration
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
-                Add documents into Conifer in minutes with no fuss and very
+                Sync documents into Conifer in minutes with no fuss and very
                 little code change.
               </p>
             </div>
